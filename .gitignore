@@ -1,0 +1,33 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with go test -c
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Build artifacts
+bin/
+build/
+
+# Dependency directories
+vendor/
+Godeps/
+
+# Debug logs
+*.log
+
+# Directory for integrated development environments (IDEs)
+.idea/
+.vscode/
+
+# Sensitive files
+*.pem
+*.key
+*.secret
+*.config
