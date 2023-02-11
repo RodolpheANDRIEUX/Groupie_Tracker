@@ -22,7 +22,7 @@ Godeps/
 # Debug logs
 *.log
 
-# Directory for integrated development environments (IDEs)
+#  Directory for integrated development environments (IDEs)
 .idea/
 .vscode/
 

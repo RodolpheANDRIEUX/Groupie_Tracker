@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    container_name: postgres_server
+    environment:
+      POSTGRES_USER: <db_user>
+      POSTGRES_PASSWORD: <db_password>
+      POSTGRES_DB: <db_name>
+    networks:
+      - postgres_network
+  api:
+    container_name: api_server
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://<db_user>:<db_password>@db:5432/<db_name>
+    networks:
+      - postgres_network
+
+networks:
+  postgres_network:
