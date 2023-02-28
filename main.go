@@ -1,22 +1,14 @@
 package main
 
-import (
-	"log"
-	"net/http"
-	"runtime"
-)
+import "net/http"
 
 func main() {
 
 	server := http.NewServeMux()
 
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		os := runtime.GOOS
-		_, err := w.Write([]byte("Hello from " + os + "!"))
-		if err != nil {
-			log.Fatal(err)
-		}
+		w.Write([]byte("Hello World"))
 	})
 
-	log.Fatal(http.ListenAndServe(":3000", server))
+	http.ListenAndServe("localhost:8080", server)
 }
