@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"Groupie-tracker/database"
+	"net/http"
+)
 
 func main() {
 
@@ -9,6 +12,8 @@ func main() {
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World"))
 	})
+
+	database.Database()
 
 	http.ListenAndServe("localhost:8080", server)
 }

@@ -1,43 +1,45 @@
 version: "3.9"
 services:
   db:
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    image: postgres
+    image: mysql:latest
     restart: always
-    user : postgres
+    user : mysql
     secrets:
-      - db_password
+    - db_password
     ports:
-      - "6666:5432"
-    container_name: postgres_server
+    - "6666:3306"
+    container_name:
+     mysql_server
     environment:
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: gp-db
+      MYSQL_DATABASE: gp-db
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
-      - postgres_network
+      - mysql_network
   api:
-    container_name: api_server
+    container_name:
+      api_server
     depends_on:
-      - db
+        - db
     build: .
     secrets:
       - db_password
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://username:password@db:6666/gp-db
+      DATABASE_URL: mysql://username:password@db:3306/gp-db
     networks:
-      - postgres_network
+      - mysql_network
 
 networks:
-  postgres_network:
+  mysql_network:
 
 secrets:
   db_password:
     file: ./secrets/db_password.txt
 
 volumes:
-    postgres_data:
-
+  mysql_data:
