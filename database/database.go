@@ -42,7 +42,7 @@ func Database() {
 		panic(err.Error())
 	}
 
-	// @TODO : essayer de lier les tables avec vue ou voir comment pour les groupes
+	// @TODO : essayer de lier les tables avec vue ou voir comment pour les groupe
 	queryGroupTable := `CREATE TABLE IF NOT EXISTS GroupID (
         GroupeID int AUTO_INCREMENT FOREIGN KEY,
         GroupeName VARCHAR(100),
