@@ -4,10 +4,6 @@ services:
     image: mysql:latest
     restart: always
     user : mysql
-    secrets:
-    - db_password
-    ports:
-    - "6666:3306"
     container_name:
      mysql_server
     environment:
@@ -25,21 +21,21 @@ services:
     depends_on:
         - db
     build: .
-    secrets:
-      - db_password
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: mysql://username:password@db:3306/gp-db
     networks:
       - mysql_network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/healthcheck" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   mysql_network:
 
-secrets:
-  db_password:
-    file: ./secrets/db_password.txt
 
 volumes:
   mysql_data:
