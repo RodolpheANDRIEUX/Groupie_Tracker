@@ -49,7 +49,7 @@ func Database() {
 		ArtistID int  PRIMARY KEY, 
 		GroupeTableID int,
         ArtisteName VARCHAR(255),
-		FOREIGN KEY (GroupeTableID) REFERENCES GroupID(GroupID)
+		FOREIGN KEY (GroupeTableID) REFERENCES Band(GroupID)
     );`
 
 	// exécution de la requête SQL
@@ -67,7 +67,7 @@ func Database() {
         GroupeTableID int,
     	Location VARCHAR(255),
 	    ConcertDate VARCHAR(255),
-		FOREIGN KEY (GroupeTableID) REFERENCES GroupID(GroupID)
+		FOREIGN KEY (GroupeTableID) REFERENCES Band(GroupID)
     );`
 
 	// exécution de la requête SQL

@@ -15,11 +15,17 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - mysql_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   api:
     container_name:
       api_server
     depends_on:
-        - db
+        db :
+          condition: service_healthy
     build: .
     ports:
       - "3000:3000"
@@ -27,11 +33,6 @@ services:
       DATABASE_URL: mysql://username:password@db:3306/gp-db
     networks:
       - mysql_network
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/healthcheck" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
 networks:
   mysql_network:
