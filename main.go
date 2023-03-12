@@ -16,6 +16,7 @@ func main() {
 
 	server := http.NewServeMux()
 
+	// display the OS to see if it's the docker container who's running the app
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		os := runtime.GOOS
 		_, err := w.Write([]byte("Hello from " + os + "!"))
@@ -24,9 +25,13 @@ func main() {
 		}
 	})
 
-	database.Database()
+	//CREATE DATABASE
+	DB := database.CreateDatabase()
+
+	//ADD DATA IN IT FROM APIs
+	database.PopulateDatabase(DB)
 
 	fmt.Print("(http://localhost:3000) Server started on port", port)
-	http.ListenAndServe(port, server)
+	log.Fatal(http.ListenAndServe(port, server))
 
 }

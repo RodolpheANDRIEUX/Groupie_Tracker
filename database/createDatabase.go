@@ -7,13 +7,7 @@ import (
 	"time"
 )
 
-type DatabaseInstence struct {
-	Db *sql.DB
-}
-
-var DataBase DatabaseInstence
-
-func Database() {
+func CreateDatabase() *sql.DB {
 
 	//Database IP :172.20.0.2
 	DB, err := sql.Open("mysql", "username:password@tcp(mysql_server:3306)/gp-db")
@@ -23,51 +17,46 @@ func Database() {
 	fmt.Println("Connexion to gp-db : Success!")
 
 	//CREATION DES TABLES
-	//CREATION OF GROUP TABLE
-
-	queryGroupTable := `CREATE TABLE IF NOT EXISTS Band(
-        GroupID int  PRIMARY KEY,
-        GroupName VARCHAR(255),
-    	Image VARCHAR(255),
-    	FirstAlbum VARCHAR(255),
-    	CreationDate int,
-        Relation VARCHAR(255)
-    );`
-	// @TODO : essayer de lier les tables avec vue ou voir comment pour les groupe
-
-	// exécution de la requête SQL
-	_, err = DB.Query(queryGroupTable)
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Println("Table GROUP created (if not exists)")
 
 	//CREATION OF ARTIST TABLE
-
-	// requête SQL pour créer la table si elle n'existe pas
-	queryArtisteTable := `CREATE TABLE IF NOT EXISTS Artist (
-		ArtistID int  PRIMARY KEY, 
-		GroupeTableID int,
-        ArtisteName VARCHAR(255),
-		FOREIGN KEY (GroupeTableID) REFERENCES Band(GroupID)
+	queryArtistTable := `CREATE TABLE IF NOT EXISTS Artist(
+        ArtistID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        ArtistName VARCHAR(255),
+    	Image VARCHAR(255),
+    	FirstAlbum VARCHAR(255),
+    	SpotifyFollowers int,
+    	CreationDate DATE,
     );`
 
 	// exécution de la requête SQL
-	_, err = DB.Query(queryArtisteTable)
+	_, err = DB.Query(queryArtistTable)
 	if err != nil {
 		panic(err.Error())
 	}
 	fmt.Println("Table ARTIST created (if not exists)")
 
-	//CREATION OF DATES TABLE
+	//CREATION OF MEMBERS TABLE
+	queryMembersTable := `CREATE TABLE IF NOT EXISTS Members (
+		MemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		MemberName VARCHAR(255),
+        ArtistTableID int,
+		FOREIGN KEY (ArtistTableID) REFERENCES Artist(ArtistID)
+    );`
 
-	// requête SQL pour créer la table si elle n'existe pas
+	// exécution de la requête SQL
+	_, err = DB.Query(queryMembersTable)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("Table MEMBERS created (if not exists)")
+
+	//CREATION OF DATES TABLE
 	queryDatesTable := `CREATE TABLE IF NOT EXISTS Dates (
-        DatesID int  PRIMARY KEY,
-        GroupeTableID int,
-    	Location VARCHAR(255),
+        DatesID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        ArtistTableID int,
+    	ConcertLocation VARCHAR(255),
 	    ConcertDate VARCHAR(255),
-		FOREIGN KEY (GroupeTableID) REFERENCES Band(GroupID)
+		FOREIGN KEY (ArtistTableID) REFERENCES Artist(ArtistID)
     );`
 
 	// exécution de la requête SQL
@@ -75,14 +64,43 @@ func Database() {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println("Table ARTIST created (if not exists)")
+	fmt.Println("Table DATES created (if not exists)")
 
-	//ADD DATA FROM API
-	InsertDataFromApi(DB)
+	//CREATION OF ALBUM TABLE
+	queryAlbumTable := `CREATE TABLE IF NOT EXISTS Album (
+        AlbumID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        ArtistTableID int,
+    	AlbumName VARCHAR(255),
+	    AlbumImage VARCHAR(255),
+    	AlbumReleaseDate VARCHAR(255),
+		FOREIGN KEY (ArtistTableID) REFERENCES Artist(ArtistID)
+    );`
+
+	// exécution de la requête SQL
+	_, err = DB.Query(queryAlbumTable)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("Table ALBUM created (if not exists)")
+
+	//CREATION OF USERS TABLE
+	queryUsersTable := `CREATE TABLE IF NOT EXISTS Users (
+    UserID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    UserName varchar(255) NOT NULL UNIQUE KEY,
+    Password varchar(255) NOT NULL,
+);`
+
+	// exécution de la requête SQL
+	_, err = DB.Query(queryUsersTable)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("Table USERS created (if not exists)")
 
 	//GOOD PRACTICE
-	DataBase = DatabaseInstence{Db: DB}
 	DB.SetConnMaxLifetime(time.Minute * 100)
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(10)
+
+	return DB
 }
