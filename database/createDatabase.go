@@ -25,7 +25,7 @@ func CreateDatabase() *sql.DB {
     	Image VARCHAR(255),
     	FirstAlbum VARCHAR(255),
     	SpotifyFollowers int,
-    	CreationDate DATE,
+    	CreationDate DATE
     );`
 
 	// exécution de la requête SQL
@@ -87,7 +87,7 @@ func CreateDatabase() *sql.DB {
 	queryUsersTable := `CREATE TABLE IF NOT EXISTS Users (
     UserID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     UserName varchar(255) NOT NULL UNIQUE KEY,
-    Password varchar(255) NOT NULL,
+    Password varchar(255) NOT NULL
 );`
 
 	// exécution de la requête SQL
