@@ -30,6 +30,7 @@ func main() {
 
 	//ADD DATA IN IT FROM APIs
 	database.PopulateDatabase(DB)
+	//api.GetToken()
 
 	fmt.Print("(http://localhost:3000) Server started on port", port)
 	log.Fatal(http.ListenAndServe(port, server))

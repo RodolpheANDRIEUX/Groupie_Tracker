@@ -72,8 +72,6 @@ func GetSpotifyToken(artistName string, BearerToken string) string {
 	// print the Artist ID
 	if len(result.Artists.Items) > 0 {
 		return result.Artists.Items[0].ID
-	} else {
-		fmt.Println("No Artist found")
 	}
 	return ""
 }

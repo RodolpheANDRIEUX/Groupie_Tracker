@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    user : mysql
+    container_name:
+     mysql_server
+    environment:
+      MYSQL_DATABASE: gp-db
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mysql_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  api:
+    image: golang:latest
+    container_name:
+      api_server_dev
+    depends_on:
+        db :
+          condition: service_healthy
+    working_dir: /app
+    command: go run main.go
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://username:password@db:3306/gp-db
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+
+
+volumes:
+  mysql_data:
