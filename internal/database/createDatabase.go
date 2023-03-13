@@ -7,7 +7,13 @@ import (
 	"time"
 )
 
-func CreateDatabase() *sql.DB {
+type DatabaseInstence struct {
+	Db *sql.DB
+}
+
+var Database DatabaseInstence
+
+func CreateDatabase() {
 
 	//Database IP :172.20.0.2
 	DB, err := sql.Open("mysql", "username:password@tcp(mysql_server:3306)/gp-db")
@@ -21,7 +27,7 @@ func CreateDatabase() *sql.DB {
 	//CREATION OF ARTIST TABLE
 	queryArtistTable := `CREATE TABLE IF NOT EXISTS Artist(
         ArtistID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        ArtistName VARCHAR(255),
+        ArtistName VARCHAR(255) UNIQUE,
     	Image VARCHAR(255),
     	FirstAlbum VARCHAR(255),
     	SpotifyFollowers int,
@@ -98,9 +104,9 @@ func CreateDatabase() *sql.DB {
 	fmt.Println("Table USERS created (if not exists)")
 
 	//GOOD PRACTICE
+	Database = DatabaseInstence{Db: DB}
 	DB.SetConnMaxLifetime(time.Minute * 100)
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(10)
 
-	return DB
 }

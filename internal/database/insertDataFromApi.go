@@ -1,7 +1,6 @@
 package database
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -72,6 +71,8 @@ func GetSpotifyToken(artistName string, BearerToken string) string {
 	// print the Artist ID
 	if len(result.Artists.Items) > 0 {
 		return result.Artists.Items[0].ID
+	} else {
+		println("wait")
 	}
 	return ""
 }
@@ -98,7 +99,7 @@ func getSpotifyArtist(token string, BearerToken string) []byte {
 	return body
 }
 
-func PopulateDatabase(DB *sql.DB) {
+func PopulateDatabase() {
 	var artists []Artist
 
 	req, err := http.NewRequest("GET", "https://groupietrackers.herokuapp.com/api/artists", nil)
@@ -136,14 +137,14 @@ func PopulateDatabase(DB *sql.DB) {
 			fmt.Println("error decoding the file: ", err)
 			return
 		}
-		SaveArtist(artist, DB)
+		SaveArtist(artist)
 		//fmt.Println(artist.ArtistName, "(", artist.CreationDate, ") - Members:", len(artist.Members), " - Followers:", artist.SpotifyFollowers.Total)
 	}
 }
 
-func SaveArtist(artist Artist, db *sql.DB) {
+func SaveArtist(artist Artist) {
 
-	stmt, err := db.Prepare("INSERT INTO Artist (ArtistName, Image, CreationDate, FirstAlbum ) VALUES (?, ?, ?, ? )")
+	stmt, err := Database.Db.Prepare("INSERT IGNORE INTO Artist (ArtistName, Image, CreationDate, FirstAlbum ) VALUES (?, ?, ?, ? )")
 	if err != nil {
 		print("Error while preparing the statement: ", err)
 	}
