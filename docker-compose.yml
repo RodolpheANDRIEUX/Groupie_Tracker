@@ -17,7 +17,7 @@ services:
       - mysql_network
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 5
   api:

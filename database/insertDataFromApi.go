@@ -145,7 +145,7 @@ func PopulateDatabase(DB *sql.DB) {
 
 func SaveArtist(artist Artist, db *sql.DB) {
 
-	stmt, err := db.Prepare("INSERT INTO Artist (ArtisteName, Image, CreationDate, FirstAlbum, ) VALUES (?, ?, ?, ? )")
+	stmt, err := db.Prepare("INSERT INTO Artist (ArtistName, Image, CreationDate, FirstAlbum ) VALUES (?, ?, ?, ? )")
 	if err != nil {
 		print("Error while preparing the statement: ", err)
 	}

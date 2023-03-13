@@ -25,7 +25,7 @@ func CreateDatabase() *sql.DB {
     	Image VARCHAR(255),
     	FirstAlbum VARCHAR(255),
     	SpotifyFollowers int,
-    	CreationDate DATE
+    	CreationDate int
     );`
 
 	// exécution de la requête SQL
