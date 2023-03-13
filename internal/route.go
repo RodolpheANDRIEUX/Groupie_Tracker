@@ -6,5 +6,6 @@ import (
 )
 
 func Init_routes(server *http.ServeMux) {
-	server.HandleFunc("/", controllers.Register)
+	server.HandleFunc("/register", controllers.Register)
+	server.HandleFunc("/login", controllers.Login)
 }
