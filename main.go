@@ -18,6 +18,7 @@ func main() {
 
 	// display the OS to see if it's the docker container who's running the app
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
 		os := runtime.GOOS
 		_, err := w.Write([]byte("Hello from " + os + "!"))
 		if err != nil {
