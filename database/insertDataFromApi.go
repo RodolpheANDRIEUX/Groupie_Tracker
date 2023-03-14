@@ -11,6 +11,7 @@ import (
 )
 
 type Artist struct {
+	YtrackID         int    `json:"id"`
 	ArtistName       string `json:"name"`
 	Image            string `json:"image"` // URL
 	SpotifyFollowers struct {
@@ -19,7 +20,7 @@ type Artist struct {
 	Members      []string            `json:"members"`
 	CreationDate int                 `json:"creationDate"`
 	FirstAlbum   string              `json:"firstAlbum"`
-	DatesAPI     string              `json:"relations"` // API rest link
+	DatesAPI     string              `json:"relations"` // URL API
 	Dates        map[string][]string `json:"datesLocations"`
 }
 
@@ -97,27 +98,65 @@ func PopulateDatabase(DB *sql.DB) {
 	var artists []Artist
 
 	resp, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
-
-	if err := json.NewDecoder(resp.Body).Decode(&artists); err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(&artists); err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
+	//resptest, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
+	//if err != nil {
+	//	panic(err)
+	//}
+	//defer resptest.Body.Close()
+	//
+	//var data struct {
+	//	Index []test `json:"index"`
+	//}
+	//err = json.NewDecoder(resptest.Body).Decode(&data)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//// Itération sur chaque entrée de l'index
+	//for _, entry := range data.Index {
+	//	fmt.Printf("ID: %d\n", entry.ID)
+	//
+	//	// Itération sur les propriétés de l'objet "datesLocations"
+	//	for cityName := range entry.DatesLocations {
+	//		fmt.Printf("City: %s\n", cityName)
+	//	}
+	//	fmt.Println()
+	//}
+
+	//dateResp, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
+	//
+	//if err := json.NewDecoder(dateResp.Body).Decode(&artists); err != nil {
+	//	fmt.Println("Error Decoding Dates:", err)
+	//	return
+	//}
+	//
+	//fmt.Println(artists[0].Dates)
+
 	BearerToken := "BQAyidSvyPBGNAoT64P7nlq_Q9OpRPFmKntsOriE0ssVv60Cs9sHu-Qc94Ldr5gaOcHY1vXwxEtoKG5o6zjW-Lw_VWabRPBQEhMFFlw0j3SCsyUQxLRuxHq_vgHcBQPcCxkyFZCVEJpKszXdHkao92Uer0hoeeEo8rnNo2kj-fzmdRYwItKjk87Vm9vBqACmW0WI9oPi"
 
 	for _, artist := range artists {
+
+		dateResp, err := http.Get(artist.DatesAPI)
+		if err != nil {
+			panic(err)
+		}
+		defer dateResp.Body.Close()
+
+		err = json.NewDecoder(dateResp.Body).Decode(&artist)
+		if err != nil {
+			panic(err)
+		}
+
 		token := GetSpotifyToken(artist.ArtistName, BearerToken)
 		spotifyBody := getSpotifyArtist(token, BearerToken)
 		err = json.Unmarshal(spotifyBody, &artist)
 		if err != nil {
 			fmt.Println("error decoding the file: ", err)
-			return
-		}
-
-		datesResp, _ := http.Get(artist.DatesAPI)
-
-		if err := json.NewDecoder(datesResp.Body).Decode(&artist); err != nil {
-			fmt.Println("Error decoding dates:", err)
 			return
 		}
 
@@ -130,24 +169,26 @@ func SaveArtist(artist Artist, db *sql.DB) {
 
 	qArtist, err := db.Prepare("INSERT INTO Artist (ArtistName, Image, FirstAlbum, SpotifyFollowers, CreationDate) VALUES (?, ?, ?, ?, ? )")
 	if err != nil {
-		print("Error while preparing the statement: ", err)
+		print("Error while preparing the statement1: ", err)
 	}
-	defer qArtist.Close()
-	result, err := qArtist.Exec(artist.ArtistName, artist.Image, artist.FirstAlbum, artist.SpotifyFollowers, artist.CreationDate)
+	result, err := qArtist.Exec(artist.ArtistName, artist.Image, artist.FirstAlbum, artist.SpotifyFollowers.Total, artist.CreationDate)
 	if err != nil {
-		print("Error while executing the statement: ", err)
+		print("Error while executing the statement1: ", err)
 	}
 
 	artistID, err := result.LastInsertId()
+	if err != nil {
+		print("Error while getting last primary key: ", err)
+	}
 
 	for _, member := range artist.Members {
 		qMembers, err := db.Prepare("INSERT INTO Members (MemberName, ArtistTableID) VALUES (?, ?)")
 		if err != nil {
-			print("Error while preparing the statement: ", err)
+			print("Error while preparing the statement2: ", err)
 		}
 		_, err = qMembers.Exec(member, artistID)
 		if err != nil {
-			print("Error while executing the statement: ", err)
+			print("Error while executing the statement2: ", err)
 		}
 	}
 
@@ -155,12 +196,12 @@ func SaveArtist(artist Artist, db *sql.DB) {
 		for _, date := range dates {
 			qDates, err := db.Prepare("INSERT INTO Dates (ConcertLocation, ConcertDate, ArtistTableID) VALUES (?, ?, ?)")
 			if err != nil {
-				print("Error while preparing the statement: ", err)
+				print("Error while preparing the statement3: ", err)
 			}
 			fmt.Println(location, date, artistID)
 			_, err = qDates.Exec(location, date, artistID)
 			if err != nil {
-				print("Error while executing the statement: ", err)
+				print("Error while executing the statement3: ", err)
 			}
 		}
 	}
