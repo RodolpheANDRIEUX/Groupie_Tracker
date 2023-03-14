@@ -2,9 +2,12 @@ package controllers
 
 import (
 	"Groupie-tracker/internal/database"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 )
 
 var userValue User
@@ -15,7 +18,22 @@ type User struct {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./internal/page/register.html"))
+
+	htmlBytes, err := os.ReadFile("page/register.html")
+	if err != nil {
+		fmt.Println("Erreur lors du chargement du fichier HTML" + err.Error())
+		log.Printf("Erreur lors du chargement du fichier HTML\" %v", err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	html := string(htmlBytes)
+
+	// Écrire la réponse HTTP
+	if _, err := fmt.Fprint(w, html); err != nil {
+		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
+	}
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
@@ -29,7 +47,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 		if user > 0 {
 			// Si l'utilisateur existe déjà, recharge la page avec un message d'erreur
-			t.Execute(w, "L'utilisateur existe déjà. Veuillez choisir un autre nom d'utilisateur.")
 			return
 		} else {
 			_, err = database.Database.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
@@ -38,12 +55,24 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 		}
 	}
-
-	t.Execute(w, nil)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("page/login.html"))
+
+	htmlBytes, err := ioutil.ReadFile("page/login.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	html := string(htmlBytes)
+
+	// Écrire la réponse HTTP
+	if _, err := fmt.Fprint(w, html); err != nil {
+		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
+	}
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
@@ -66,8 +95,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		}
 	}
-
-	t.Execute(w, nil)
 }
 
 func HashPassword(password string) (string, error) {

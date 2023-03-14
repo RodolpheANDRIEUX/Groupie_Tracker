@@ -23,7 +23,7 @@ func CreateDatabase() {
 	//CREATION OF ARTIST TABLE
 	queryArtistTable := `CREATE TABLE IF NOT EXISTS Artist(
         ArtistID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        ArtistName VARCHAR(255) UNIQUE,
+        ArtistName VARCHAR(255),
     	Image VARCHAR(255),
     	FirstAlbum VARCHAR(255),
     	SpotifyFollowers int,
