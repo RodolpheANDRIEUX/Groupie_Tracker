@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"Groupie-tracker/internal/database"
-	"database/sql"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
@@ -23,21 +22,21 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("usernameInput")
 		password, _ := HashPassword(r.FormValue("passwordInput"))
 
-		var user User
-		err := database.Database.Db.QueryRow("SELECT UserName FROM Users WHERE UserName=?", username).Scan(&user.Username)
+		var user int
+		err := database.Database.Db.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
+		if err != nil {
+			panic(err.Error())
+		}
 
-		switch {
-		case err == sql.ErrNoRows:
-			_, err = database.Database.Db.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
-			if err != nil {
-				println("Error 2")
-			}
-		case err != nil:
-			panic(err)
-		default:
+		if user > 0 {
 			// Si l'utilisateur existe déjà, recharge la page avec un message d'erreur
 			t.Execute(w, "L'utilisateur existe déjà. Veuillez choisir un autre nom d'utilisateur.")
 			return
+		} else {
+			_, err = database.Database.Db.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
+			session, _ := CookieStorage.Get(r, username)
+			session.Values["Username"] = userValue.Username
+
 		}
 	}
 
@@ -60,8 +59,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		if CheckPasswordHash(passwordInput, passwordDB) {
 			println("Password correct")
+			session, _ := CookieStorage.Get(r, username)
+			session.Values["Username"] = userValue.Username
+			//todo : Redirect to next page
 		} else {
 			println("Password incorrect")
+			//todo : Reload page with error message
+
 		}
 	}
 
