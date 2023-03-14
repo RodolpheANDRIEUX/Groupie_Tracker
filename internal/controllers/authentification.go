@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 var userValue User
@@ -18,9 +19,10 @@ type User struct {
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
-	htmlBytes, err := ioutil.ReadFile("page/register.html")
+	htmlBytes, err := os.ReadFile("page/register.html")
 	if err != nil {
-		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
+		fmt.Println("Erreur lors du chargement du fichier HTML" + err.Error())
+		log.Printf("Erreur lors du chargement du fichier HTML\" %v", err)
 		return
 	}
 
