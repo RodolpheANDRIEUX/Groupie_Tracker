@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,21 +11,17 @@ import (
 )
 
 type Artist struct {
+	YtrackID         int    `json:"id"`
 	ArtistName       string `json:"name"`
 	Image            string `json:"image"` // URL
 	SpotifyFollowers struct {
 		Total int `json:"total"`
 	} `json:"followers"`
-	Members      []string `json:"members"`
-	CreationDate int      `json:"creationDate"`
-	FirstAlbum   string   `json:"firstAlbum"`
-	DatesAPI     string   `json:"dates"` // API rest link
-	Dates        []Dates
-}
-
-type Dates struct {
-	ConcertLocation string `json:"location"`
-	ConcertDate     string `json:"concertDate"`
+	Members      []string            `json:"members"`
+	CreationDate int                 `json:"creationDate"`
+	FirstAlbum   string              `json:"firstAlbum"`
+	DatesAPI     string              `json:"relations"` // URL API
+	Dates        map[string][]string `json:"datesLocations"`
 }
 
 type SearchResult struct {
@@ -71,8 +68,6 @@ func GetSpotifyToken(artistName string, BearerToken string) string {
 	// print the Artist ID
 	if len(result.Artists.Items) > 0 {
 		return result.Artists.Items[0].ID
-	} else {
-		println("wait")
 	}
 	return ""
 }
@@ -99,37 +94,64 @@ func getSpotifyArtist(token string, BearerToken string) []byte {
 	return body
 }
 
-func PopulateDatabase() {
+func PopulateDatabase(DB *sql.DB) {
 	var artists []Artist
 
-	req, err := http.NewRequest("GET", "https://groupietrackers.herokuapp.com/api/artists", nil)
-	if err != nil {
-		fmt.Println("Error creating request:", err)
+	resp, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
+	if err = json.NewDecoder(resp.Body).Decode(&artists); err != nil {
+		fmt.Println("Error:", err)
 		return
 	}
 
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return
-	}
+	//resptest, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
+	//if err != nil {
+	//	panic(err)
+	//}
+	//defer resptest.Body.Close()
+	//
+	//var data struct {
+	//	Index []test `json:"index"`
+	//}
+	//err = json.NewDecoder(resptest.Body).Decode(&data)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//// Itération sur chaque entrée de l'index
+	//for _, entry := range data.Index {
+	//	fmt.Printf("ID: %d\n", entry.ID)
+	//
+	//	// Itération sur les propriétés de l'objet "datesLocations"
+	//	for cityName := range entry.DatesLocations {
+	//		fmt.Printf("City: %s\n", cityName)
+	//	}
+	//	fmt.Println()
+	//}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("error ReadAll the file: ", err)
-		return
-	}
-
-	err = json.Unmarshal(body, &artists)
-	if err != nil {
-		fmt.Println("error unmarshal the file: ", err)
-		return
-	}
+	//dateResp, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
+	//
+	//if err := json.NewDecoder(dateResp.Body).Decode(&artists); err != nil {
+	//	fmt.Println("Error Decoding Dates:", err)
+	//	return
+	//}
+	//
+	//fmt.Println(artists[0].Dates)
 
 	BearerToken := "BQAyidSvyPBGNAoT64P7nlq_Q9OpRPFmKntsOriE0ssVv60Cs9sHu-Qc94Ldr5gaOcHY1vXwxEtoKG5o6zjW-Lw_VWabRPBQEhMFFlw0j3SCsyUQxLRuxHq_vgHcBQPcCxkyFZCVEJpKszXdHkao92Uer0hoeeEo8rnNo2kj-fzmdRYwItKjk87Vm9vBqACmW0WI9oPi"
 
 	for _, artist := range artists {
+
+		dateResp, err := http.Get(artist.DatesAPI)
+		if err != nil {
+			panic(err)
+		}
+		defer dateResp.Body.Close()
+
+		err = json.NewDecoder(dateResp.Body).Decode(&artist)
+		if err != nil {
+			panic(err)
+		}
+
 		token := GetSpotifyToken(artist.ArtistName, BearerToken)
 		spotifyBody := getSpotifyArtist(token, BearerToken)
 		err = json.Unmarshal(spotifyBody, &artist)
@@ -137,21 +159,50 @@ func PopulateDatabase() {
 			fmt.Println("error decoding the file: ", err)
 			return
 		}
-		SaveArtist(artist)
+
 		//fmt.Println(artist.ArtistName, "(", artist.CreationDate, ") - Members:", len(artist.Members), " - Followers:", artist.SpotifyFollowers.Total)
+		SaveArtist(artist, DB)
 	}
 }
 
-func SaveArtist(artist Artist) {
+func SaveArtist(artist Artist, db *sql.DB) {
 
-	stmt, err := Database.Db.Prepare("INSERT IGNORE INTO Artist (ArtistName, Image, CreationDate, FirstAlbum ) VALUES (?, ?, ?, ? )")
+	qArtist, err := db.Prepare("INSERT INTO Artist (ArtistName, Image, FirstAlbum, SpotifyFollowers, CreationDate) VALUES (?, ?, ?, ?, ? )")
 	if err != nil {
-		print("Error while preparing the statement: ", err)
+		print("Error while preparing the statement1: ", err)
 	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(artist.ArtistName, artist.Image, artist.CreationDate, artist.FirstAlbum)
+	result, err := qArtist.Exec(artist.ArtistName, artist.Image, artist.FirstAlbum, artist.SpotifyFollowers.Total, artist.CreationDate)
 	if err != nil {
-		print("Error while executing the statement: ", err)
+		print("Error while executing the statement1: ", err)
+	}
+
+	artistID, err := result.LastInsertId()
+	if err != nil {
+		print("Error while getting last primary key: ", err)
+	}
+
+	for _, member := range artist.Members {
+		qMembers, err := db.Prepare("INSERT INTO Members (MemberName, ArtistTableID) VALUES (?, ?)")
+		if err != nil {
+			print("Error while preparing the statement2: ", err)
+		}
+		_, err = qMembers.Exec(member, artistID)
+		if err != nil {
+			print("Error while executing the statement2: ", err)
+		}
+	}
+
+	for location, dates := range artist.Dates {
+		for _, date := range dates {
+			qDates, err := db.Prepare("INSERT INTO Dates (ConcertLocation, ConcertDate, ArtistTableID) VALUES (?, ?, ?)")
+			if err != nil {
+				print("Error while preparing the statement3: ", err)
+			}
+			fmt.Println(location, date, artistID)
+			_, err = qDates.Exec(location, date, artistID)
+			if err != nil {
+				print("Error while executing the statement3: ", err)
+			}
+		}
 	}
 }
