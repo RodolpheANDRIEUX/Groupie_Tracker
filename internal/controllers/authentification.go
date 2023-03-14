@@ -15,15 +15,14 @@ type User struct {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	fileNameRegister := "register.html"
-	t := template.Must(template.ParseFiles("page/" + fileNameRegister))
+	t := template.Must(template.ParseFiles("./internal/page/register.html"))
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
 		password, _ := HashPassword(r.FormValue("passwordInput"))
 
 		var user int
-		err := database.Database.Db.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
+		err := database.Database.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -33,7 +32,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			t.Execute(w, "L'utilisateur existe déjà. Veuillez choisir un autre nom d'utilisateur.")
 			return
 		} else {
-			_, err = database.Database.Db.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
+			_, err = database.Database.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
 			session, _ := CookieStorage.Get(r, username)
 			session.Values["Username"] = userValue.Username
 
@@ -44,15 +43,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	fileNameLogin := "login.html"
-	t := template.Must(template.ParseFiles("page/" + fileNameLogin))
+	t := template.Must(template.ParseFiles("page/login.html"))
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
 		passwordInput := r.FormValue("passwordInput")
 
 		var passwordDB string
-		err := database.Database.Db.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
+		err := database.Database.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
 		if err != nil {
 			panic(err.Error())
 		}
