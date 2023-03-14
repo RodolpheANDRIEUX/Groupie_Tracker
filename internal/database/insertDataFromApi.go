@@ -94,7 +94,8 @@ func getSpotifyArtist(token string, BearerToken string) []byte {
 	return body
 }
 
-func PopulateDatabase(DB *sql.DB) {
+func PopulateDatabase() {
+	DB := Database
 	var artists []Artist
 
 	resp, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
@@ -102,40 +103,6 @@ func PopulateDatabase(DB *sql.DB) {
 		fmt.Println("Error:", err)
 		return
 	}
-
-	//resptest, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer resptest.Body.Close()
-	//
-	//var data struct {
-	//	Index []test `json:"index"`
-	//}
-	//err = json.NewDecoder(resptest.Body).Decode(&data)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//// Itération sur chaque entrée de l'index
-	//for _, entry := range data.Index {
-	//	fmt.Printf("ID: %d\n", entry.ID)
-	//
-	//	// Itération sur les propriétés de l'objet "datesLocations"
-	//	for cityName := range entry.DatesLocations {
-	//		fmt.Printf("City: %s\n", cityName)
-	//	}
-	//	fmt.Println()
-	//}
-
-	//dateResp, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
-	//
-	//if err := json.NewDecoder(dateResp.Body).Decode(&artists); err != nil {
-	//	fmt.Println("Error Decoding Dates:", err)
-	//	return
-	//}
-	//
-	//fmt.Println(artists[0].Dates)
 
 	BearerToken := "BQAyidSvyPBGNAoT64P7nlq_Q9OpRPFmKntsOriE0ssVv60Cs9sHu-Qc94Ldr5gaOcHY1vXwxEtoKG5o6zjW-Lw_VWabRPBQEhMFFlw0j3SCsyUQxLRuxHq_vgHcBQPcCxkyFZCVEJpKszXdHkao92Uer0hoeeEo8rnNo2kj-fzmdRYwItKjk87Vm9vBqACmW0WI9oPi"
 

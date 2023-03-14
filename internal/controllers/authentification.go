@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"Groupie-tracker/internal/database"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -15,44 +17,67 @@ type User struct {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	fileNameRegister := "register.html"
-	t := template.Must(template.ParseFiles("page/" + fileNameRegister))
+
+	htmlBytes, err := ioutil.ReadFile("page/register.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	html := string(htmlBytes)
+
+	// Écrire la réponse HTTP
+	if _, err := fmt.Fprint(w, html); err != nil {
+		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
+	}
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
 		password, _ := HashPassword(r.FormValue("passwordInput"))
 
 		var user int
-		err := database.Database.Db.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
+		err := database.Database.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
 		if err != nil {
 			panic(err.Error())
 		}
 
 		if user > 0 {
 			// Si l'utilisateur existe déjà, recharge la page avec un message d'erreur
-			t.Execute(w, "L'utilisateur existe déjà. Veuillez choisir un autre nom d'utilisateur.")
 			return
 		} else {
-			_, err = database.Database.Db.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
+			_, err = database.Database.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
 			session, _ := CookieStorage.Get(r, username)
 			session.Values["Username"] = userValue.Username
 
 		}
 	}
-
-	t.Execute(w, nil)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	fileNameLogin := "login.html"
-	t := template.Must(template.ParseFiles("page/" + fileNameLogin))
+
+	htmlBytes, err := ioutil.ReadFile("page/login.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	html := string(htmlBytes)
+
+	// Écrire la réponse HTTP
+	if _, err := fmt.Fprint(w, html); err != nil {
+		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
+	}
 
 	if r.Method == http.MethodPost {
 		username := r.FormValue("usernameInput")
 		passwordInput := r.FormValue("passwordInput")
 
 		var passwordDB string
-		err := database.Database.Db.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
+		err := database.Database.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -68,8 +93,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		}
 	}
-
-	t.Execute(w, nil)
 }
 
 func HashPassword(password string) (string, error) {
