@@ -23,7 +23,7 @@ func CreateDatabase() {
 	//CREATION OF ARTIST TABLE
 	queryArtistTable := `CREATE TABLE IF NOT EXISTS Artist(
         ArtistID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        ArtistName VARCHAR(255),
+        ArtistName VARCHAR(255), 
     	Image VARCHAR(255),
     	FirstAlbum VARCHAR(255),
     	SpotifyFollowers int,
@@ -41,8 +41,8 @@ func CreateDatabase() {
 	queryMembersTable := `CREATE TABLE IF NOT EXISTS Members (
 		MemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		MemberName VARCHAR(255),
-        ArtistTableID int,
-		FOREIGN KEY (ArtistTableID) REFERENCES Artist(ArtistID)
+		ArtistID int,
+		FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID)
     );`
 
 	// exécution de la requête SQL
@@ -55,10 +55,10 @@ func CreateDatabase() {
 	//CREATION OF DATES TABLE
 	queryDatesTable := `CREATE TABLE IF NOT EXISTS Dates (
         DatesID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        ArtistTableID int,
+        ArtistID int,
     	ConcertLocation VARCHAR(255),
 	    ConcertDate VARCHAR(255),
-		FOREIGN KEY (ArtistTableID) REFERENCES Artist(ArtistID)
+		FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID)
     );`
 
 	// exécution de la requête SQL
