@@ -1,0 +1,46 @@
+
+#home {
+    height: 90vh;
+}
+
+#mainTitleSection{
+    border: dot-dash red 5px;
+    position: absolute;
+    top: 180px;
+    left: 100px;
+}
+
+#mainTitleSection .Title1{
+    font-size: 80px;
+}
+
+#mainTitleSection .Title1 span {
+    display: inline-block;
+}
+
+#mainTitleSection .Title1 span::first-letter {
+    color: #e7580a;
+}
+
+#searchBarSection{
+    /*border: dashed blue 3px;*/
+    position: absolute;
+    top: 90px;
+    right: 70px;
+}
+
+.Title2{
+    font-size: 40px;
+    letter-spacing: .8rem;
+}
+
+.Title2::first-letter{
+    color: #e7580a;
+}
+
+.line{
+    margin-bottom: 20px;
+    height: 2.5px;
+    width: 300px;
+    background-color: white;
+}
