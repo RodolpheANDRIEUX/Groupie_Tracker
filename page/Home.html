@@ -4,38 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="ArtistSection.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alata">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ABeeZee">
     <title>Groupie Tracker</title>
 </head>
 
 
 <body>
+<img id="BG" src="https://c1.wallpaperflare.com/path/55/76/873/596c94145148c-243181251f8206eb813b43cab7878d27.jpg">
+<div class="square" id="kanye">
+    <img src="https://r4.wallpaperflare.com/wallpaper/293/961/140/kanye-west-concerts-pablo-hd-wallpaper-f3f9edc3165794803c04cfedf23f388a.jpg">
+</div>
+<div class="square" id="guitar" >
+    <img src="https://c1.wallpaperflare.com/path/540/282/508/audience-band-concert-crowd-878732d46f466201e578c07925ca9c9b.jpg">
+</div>
+
+
 <header>
-    <nav>
         <img id="logo" src="tempAssets/Icon.png">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#artist">Artist</a></li>
-            <li><a href="#map">Map</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </nav>
+        <div id="nav">
+            <a href="#home">HOME</a>
+            <a href="#artist">ARTIST</a>
+            <a href="#map">MAP</a>
+            <a href="#dates">DATES</a>
+            <a href="#about">ABOUT</a>
+        </div>
 </header>
 
 <main>
     <section id="home">
         <div id="mainTitleSection">
-            <h1>Groupie <span id="T">Tracker</span></h1>
+            <div class="Title1">Groupie <span id="T">Tracker</span></div>
             <p>Never miss a beat with Groupie Tracker - your ultimate guide to music artists and concert dates</p>
         </div>
 
-        <form>
-            <input type="search" id="search" name="search" placeholder="Rechercher">
-            <button type="submit">Chercher</button>
-        </form>
+        <div id="searchBarSection">
+            <form>
+                <p>Find your favorite artist, group, ect...</p>
+                <input type="search" id="search" name="search" placeholder="Rechercher">
+                <button type="submit">Chercher</button>
+            </form>
+        </div>
+
     </section>
 
     <section id="artist">
-        <h2>Artist</h2>
+        <div class="Title2">Artist</div>
+        <div class="line"></div>
+        <button id="Filters">Filters</button>
+
         <div class="grid-container">
             <!-- Ajoutez les cartes d'artistes ici, exemple d'une carte: -->
             <div class="card">
@@ -47,14 +66,24 @@
     </section>
 
     <section id="map">
-        <h2>Map</h2>
+        <div class="Title2">Map</div>
+        <div class="line"></div>
         <!-- Insérez ici la carte en utilisant un service de cartographie tel que Google Maps ou OpenStreetMap -->
     </section>
 
+    <section id="dates">
+        <div class="Title2">DATES</div>
+        <div class="line"></div>
+        <p>dates...</p>
+    </section>
+
     <section id="about">
-        <h2>About</h2>
+        <div class="Title2">About</div>
+        <div class="line"></div>
         <p>Informations sur le site ou l'application...</p>
     </section>
 </main>
 </body>
 </html>
+
+<script src="Home.js"></script>

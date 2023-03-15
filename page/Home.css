@@ -1,71 +1,46 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color: #fafafa;
-}
-
-body::-webkit-scrollbar {
-    display: none;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #493336 url("https://c1.wallpaperflare.com/path/55/76/873/596c94145148c-243181251f8206eb813b43cab7878d27.jpg") no-repeat;
-    background-size: cover;
-}
-
-ul {
-    display: flex;
-    align-items: center;
-    list-style: none;
-}
-
-nav{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-}
-
-header{
-    position: fixed;
-    width: 100%;
-    height: 80px;
-    z-index: 1000;
-    top: 0;
-    background: rgba(255, 255, 255, 0.01);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(25px);
-}
-
-#logo {
-    position: absolute;
-    top: 15px;
-    left: 50px;
-    margin: 0;
-    padding: 0;
-}
 
 #home {
-    height: 100vh;
+    height: 90vh;
 }
 
 #mainTitleSection{
-    border: dot-dash red;
+    border: dot-dash red 5px;
     position: absolute;
-    top: 215px;
+    top: 180px;
     left: 100px;
 }
 
-#mainTitleSection h1{
-    font-size: 100px;
+#mainTitleSection .Title1{
+    font-size: 80px;
 }
 
-#mainTitleSection h1 span {
+#mainTitleSection .Title1 span {
     display: inline-block;
 }
 
-#mainTitleSection h1 span::first-letter {
+#mainTitleSection .Title1 span::first-letter {
     color: #e7580a;
+}
+
+#searchBarSection{
+    /*border: dashed blue 3px;*/
+    position: absolute;
+    top: 90px;
+    right: 70px;
+}
+
+.Title2{
+    font-size: 40px;
+    letter-spacing: .8rem;
+}
+
+.Title2::first-letter{
+    color: #e7580a;
+}
+
+.line{
+    margin-bottom: 20px;
+    height: 2.5px;
+    width: 300px;
+    background-color: white;
 }

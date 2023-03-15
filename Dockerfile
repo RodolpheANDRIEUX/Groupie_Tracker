@@ -8,6 +8,6 @@ RUN go build -o main .
 FROM alpine:latest as runner
 WORKDIR /app
 COPY --from=builder /app/main /app/main
-COPY page /app/page
+COPY internal /app/internal
 EXPOSE 3000
 CMD ["./main"]
