@@ -10,7 +10,7 @@ import (
 func Home(w http.ResponseWriter, r *http.Request) {
 	// launch page/home.html
 
-	htmlBytes, err := os.ReadFile("page/home.html")
+	htmlBytes, err := os.ReadFile("page/Home.html")
 	if err != nil {
 		fmt.Println("Erreur lors du chargement du fichier HTML" + err.Error())
 		log.Printf("Erreur lors du chargement du fichier HTML\" %v", err)

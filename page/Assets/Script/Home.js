@@ -1,5 +1,5 @@
 async function fetchArtistData() {
-    const response = await fetch("https://groupietrackers.herokuapp.com/api/artists");
+    const response = await fetch("http://localhost:3000/api");
     return await response.json();
 }
 
@@ -17,7 +17,7 @@ function createArtistCard(artist) {
 }
 
 async function displayArtistCards() {
-    const container = document.querySelector(".container");
+    const container = document.querySelector(".grid-container");
     const artists = await fetchArtistData();
 
     if (artists && artists.length > 0) {
