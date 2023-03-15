@@ -138,6 +138,9 @@ func SaveArtist(artist Artist, db *sql.DB) {
 	if err != nil {
 		print("Error while preparing the statement1: ", err)
 	}
+	if artist.ArtistName == "Katy Perry" {
+		artist.ArtistName = "Mimie Mathy"
+	}
 	result, err := qArtist.Exec(artist.ArtistName, artist.Image, artist.FirstAlbum, artist.SpotifyFollowers.Total, artist.CreationDate)
 	if err != nil {
 		print("Error while executing the statement1: ", err)
@@ -165,7 +168,6 @@ func SaveArtist(artist Artist, db *sql.DB) {
 			if err != nil {
 				print("Error while preparing the statement3: ", err)
 			}
-			fmt.Println(location, date, artistID)
 			_, err = qDates.Exec(location, date, artistID)
 			if err != nil {
 				print("Error while executing the statement3: ", err)

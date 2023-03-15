@@ -1,6 +1,6 @@
 
 #home {
-    height: 90vh;
+    height: 82vh;
 }
 
 #mainTitleSection{
@@ -22,16 +22,22 @@
     color: #e7580a;
 }
 
+#mainTitleSection p{
+    margin-top: 20px;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
 #searchBarSection{
-    /*border: dashed blue 3px;*/
     position: absolute;
     top: 90px;
     right: 70px;
 }
 
 .Title2{
+    padding-top: 60px;
     font-size: 40px;
-    letter-spacing: .8rem;
+    letter-spacing: .5rem;
 }
 
 .Title2::first-letter{
@@ -43,4 +49,8 @@
     height: 2.5px;
     width: 300px;
     background-color: white;
+}
+
+section {
+    padding: 0 5vw 0 5vw;
 }

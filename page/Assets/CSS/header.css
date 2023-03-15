@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -65,7 +69,9 @@ body {
 
 #nav a {
     text-decoration: none;
-    font-size: 20px;
+    font-family: 'ABeeZee', sans-serif;
+    letter-spacing: 4px;
+    font-size: 18px;
     width: 120px;
     height: 100%;
     padding-left: 80px;
@@ -91,6 +97,7 @@ header{
     position: absolute;
     top: 5px;
     left: 40px;
+    height: 80%;
     margin: 0;
     padding: 0;
 }

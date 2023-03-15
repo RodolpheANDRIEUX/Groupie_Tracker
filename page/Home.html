@@ -23,10 +23,10 @@
 
 
 <header>
-        <img id="logo" src="Assets/Icon.png">
+        <img id="logo" src="Assets/img/icon.png">
         <div id="nav">
             <a href="#home">HOME</a>
-            <a href="#artist">ARTIST</a>
+            <a href="#artist">ARTISTS</a>
             <a href="#map">MAP</a>
             <a href="#dates">DATES</a>
             <a href="#about">ABOUT</a>
@@ -37,7 +37,7 @@
     <section id="home">
         <div id="mainTitleSection">
             <div class="Title1">Groupie <span id="T">Tracker</span></div>
-            <p>Never miss a beat with Groupie Tracker - your ultimate guide to music artists and concert dates</p>
+            <p>Never miss a beat with Groupie Tracker - your ultimate guide to <br/>music artists and concert dates</p>
         </div>
 
         <div id="searchBarSection">
@@ -51,18 +51,26 @@
     </section>
 
     <section id="artist">
-        <div class="Title2">Artist</div>
-        <div class="line"></div>
-        <button id="Filters">Filters</button>
-
-        <div class="grid-container">
-            <!-- Ajoutez les cartes d'artistes ici, exemple d'une carte: -->
-            <div class="card">
-                <img src="artist1.jpg" alt="Artist 1">
-                <h3>Artist 1</h3>
-                <p>Description de l'artiste...</p>
+        <template id="artist-card-template">
+        <div class="card">
+            <img class="artist-image" src="https://r4.wallpaperflare.com/wallpaper/293/961/140/kanye-west-concerts-pablo-hd-wallpaper-f3f9edc3165794803c04cfedf23f388a.jpg" alt="Artist image">
+            <h3 class="artist-name">Artist NameArtist Name like super long</h3>
+            <p class="artist-date">1998</p>
+            <div class="cardButtons">
+                <button class="datesButton" >DATES</button>
+                <span class="artist-info">Learn more</span>
             </div>
         </div>
+    </template>
+
+        <div class="Title2">Artists</div>
+        <div class="line"></div>
+        <button id="Filters" class="nice-button">Filters</button>
+
+        <div class="grid-container">
+
+        </div>
+        <button id="More" class="nice-button">More</button>
     </section>
 
     <section id="map">
