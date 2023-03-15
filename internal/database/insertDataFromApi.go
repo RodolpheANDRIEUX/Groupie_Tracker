@@ -22,6 +22,7 @@ type Artist struct {
 	FirstAlbum   string              `json:"firstAlbum"`
 	DatesAPI     string              `json:"relations"` // URL API
 	Dates        map[string][]string `json:"datesLocations"`
+	ConcertDates []string            `json:"concert_dates"`
 }
 
 type SearchResult struct {
@@ -134,7 +135,7 @@ func PopulateDatabase() {
 
 func SaveArtist(artist Artist, db *sql.DB) {
 
-	qArtist, err := db.Prepare("INSERT INTO Artist (ArtistName, Image, FirstAlbum, SpotifyFollowers, CreationDate) VALUES (?, ?, ?, ?, ? )")
+	qArtist, err := db.Prepare("INSERT IGNORE INTO Artist (ArtistName, Image, FirstAlbum, SpotifyFollowers, CreationDate) VALUES (?, ?, ?, ?, ? )")
 	if err != nil {
 		print("Error while preparing the statement1: ", err)
 	}
@@ -152,7 +153,7 @@ func SaveArtist(artist Artist, db *sql.DB) {
 	}
 
 	for _, member := range artist.Members {
-		qMembers, err := db.Prepare("INSERT INTO Members (MemberName, ArtistTableID) VALUES (?, ?)")
+		qMembers, err := db.Prepare("INSERT IGNORE INTO Members (MemberName, ArtistID) VALUES (?, ?)")
 		if err != nil {
 			print("Error while preparing the statement2: ", err)
 		}
@@ -164,7 +165,7 @@ func SaveArtist(artist Artist, db *sql.DB) {
 
 	for location, dates := range artist.Dates {
 		for _, date := range dates {
-			qDates, err := db.Prepare("INSERT INTO Dates (ConcertLocation, ConcertDate, ArtistTableID) VALUES (?, ?, ?)")
+			qDates, err := db.Prepare("INSERT IGNORE INTO Dates (ConcertLocation, ConcertDate, ArtistID) VALUES (?, ?, ?)")
 			if err != nil {
 				print("Error while preparing the statement3: ", err)
 			}
