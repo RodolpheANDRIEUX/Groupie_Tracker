@@ -17,6 +17,39 @@ type User struct {
 	Password string
 }
 
+func Authentification(w http.ResponseWriter, r *http.Request) {
+
+	// Charger le contenu des fichiers HTML, CSS et JS
+	htmlBytes, err := ioutil.ReadFile("page/authentification.html")
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
+		return
+	}
+	//cssBytes, err := ioutil.ReadFile("./static/style.css")
+	//if err != nil {
+	//	http.Error(w, "Erreur lors du chargement du fichier CSS", http.StatusInternalServerError)
+	//	return
+	//}
+	//if err != nil {
+	//http.Error(w, "Erreur lors du chargement du fichier JavaScript", http.StatusInternalServerError)
+	//return
+	//}
+	//jsBytes, err := ioutil.ReadFile("./static/script.js")
+
+	// Définir l'en-tête de la réponse HTTP
+	w.Header().Set("Content-Type", "text/html")
+
+	// Concaténer le contenu des fichiers HTML, CSS et JS
+	html := string(htmlBytes)
+	//html = strings.Replace(html, "{{CSS}}", string(cssBytes), 1)
+	//html = strings.Replace(html, "{{JS}}", string(jsBytes), 1)
+
+	// Écrire la réponse HTTP
+	if _, err := fmt.Fprint(w, html); err != nil {
+		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
+	}
+}
+
 func Register(w http.ResponseWriter, r *http.Request) {
 
 	htmlBytes, err := os.ReadFile("page/register.html")

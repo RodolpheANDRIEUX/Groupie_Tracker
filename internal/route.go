@@ -11,12 +11,8 @@ func Init_routes(server *http.ServeMux) {
 	server.HandleFunc("/register", controllers.Register)
 	server.HandleFunc("/login", controllers.Login)
 
-<<<<<<<<< Temporary merge branch 1
-	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("../page"))))
-=========
+	server.Handle("/Assets/", http.StripPrefix("/Assets/", http.FileServer(http.Dir("page/Assets"))))
 	server.HandleFunc("/api", api.CreateAPI)
+	server.HandleFunc("/authentification", controllers.Authentification)
 
-	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("../assets"))))
-
->>>>>>>>> Temporary merge branch 2
 }
