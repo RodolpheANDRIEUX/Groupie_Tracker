@@ -51,6 +51,17 @@
     background-color: white;
 }
 
+.Title3{
+    padding-top: 60px;
+    font-size: 30px;
+    letter-spacing: .5rem;
+}
+
+.Title3::first-letter{
+    color: #e7580a;
+    font-size: 35px;
+}
+
 section {
     padding: 0 5vw 0 5vw;
 }

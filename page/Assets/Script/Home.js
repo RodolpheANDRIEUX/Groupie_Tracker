@@ -65,4 +65,24 @@ document.getElementById("More").addEventListener("click", async () => {
     document.getElementById("More").style.display = "none";
 });
 
+async function fetchPhotoUrl(searchTerm) {
+    const apiUrl = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=qeN1F7bV473dm1aW_F5u6nfnc-6BlCIfoeaTm8fSSBY`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+            const firstPhoto = data.results[0];
+            return firstPhoto.urls.raw;
+        } else {
+            console.log("Aucune photo trouvée pour ce terme de recherche.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération des données de l'API Unsplash :", error);
+        return null;
+    }
+}
+
 displayArtistCards(12).then(r => console.log(r));
