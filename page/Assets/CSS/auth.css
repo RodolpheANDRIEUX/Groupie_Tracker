@@ -10,7 +10,7 @@
 /*    margin-left: 40px;*/
 /*}*/
 
-.navigation .btnLogin-popup {
+.btnLogin-popup {
     width: 130px;
     height: 50px;
     background: transparent;
@@ -42,15 +42,6 @@ header {
     z-index: 99;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: url("https://c1.wallpaperflare.com/path/55/76/873/596c94145148c-243181251f8206eb813b43cab7878d27.jpg");
-    background-size: cover;
-    background-position: center;
-}
 
 .wrapper {
     position: relative;

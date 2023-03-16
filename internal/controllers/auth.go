@@ -10,8 +10,6 @@ import (
 	"os"
 )
 
-var userValue User
-
 type User struct {
 	Username string
 	Password string
@@ -68,7 +66,7 @@ func Authentification(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	htmlBytes, err := ioutil.ReadFile("page/auth.html")
+	htmlBytes, err := ioutil.ReadFile("page/Home.html")
 	if err != nil {
 		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
 		return
@@ -82,6 +80,8 @@ func Authentification(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
 	}
 }
+
+var userValue User
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
