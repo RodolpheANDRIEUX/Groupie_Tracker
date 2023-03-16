@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link href="/vite.svg" rel="icon" type="image/svg+xml"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link href="Assets/CSS/auth.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alata">
+
+    <title>Glass Login</title>
+</head>
+<body>
+
+<header>
+
+    <nav class="navigation">
+
+        <button class="btnLogin-popup">Login</button>
+    </nav>
+</header>
+
+<div class="wrapper">
+    <span class="icon-close">
+        <ion-icon name="close-outline"></ion-icon>
+    </span>
+
+
+    <div class="form-box login">
+        <h2>Login</h2>
+
+        <form action="/auth" method="post">
+            <input type="hidden" name="form_type" value="login">
+
+            <div class="input-box">
+                <span class="icon"></span>
+                <input id="UsernameLogin" name="usernameLogin"  autocomplete="off" required type="text">
+                <label>Username</label>
+            </div>
+
+            <div class="input-box">
+                <span class="icon"></span>
+                <input id="passwordLogin" name="passwordLogin" required type="password">
+                <label>Password</label>
+            </div>
+
+
+
+            <button type="submit" class="btn">Login</button>
+
+            <div class="login-register">
+                <p>Don't have an account? <a class="register-link" href="#">Register</a></p>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-box register">
+        <h2>Registration</h2>
+
+        <form action="/auth" method="post">
+            <input type="hidden" name="form_type" value="register">
+            <div class="input-box">
+                <span class="icon"></span>
+                <input id="usernameRegister" name="usernameRegister" required type="text">
+                <label>Username</label>
+            </div>
+
+            <div class="input-box">
+                <span class="icon"></span>
+                <input id="passwordRegister" name="passwordRegister" required type="password">
+                <label>Password</label>
+            </div>
+
+            <div class="remember-forgot">
+                <label for="remember"> <input id="remember" type="checkbox">I agree to the terms & conditions</label>
+
+            </div>
+            <button type="submit" class="btn">Register</button>
+
+
+            <div class="login-register">
+                <p>Already have an account? <a class="login-link" href="#">Login</a></p>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+
+
+
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="Assets/Script/auth.js"></script>
+</body>
+</html>

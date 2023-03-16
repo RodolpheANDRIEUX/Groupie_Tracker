@@ -166,7 +166,7 @@ func SaveArtist(artist Artist, db *sql.DB) {
 			if err != nil {
 				print("Error while preparing the statement3: ", err)
 			}
-			fmt.Println(location, date, artistID)
+			fmt.Println("attends encore")
 			_, err = qDates.Exec(location, date, artistID)
 			if err != nil {
 				print("Error while executing the statement3: ", err)

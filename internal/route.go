@@ -8,11 +8,14 @@ import (
 
 func Init_routes(server *http.ServeMux) {
 
-	server.HandleFunc("/register", controllers.Register)
-	server.HandleFunc("/login", controllers.Login)
-
 	server.Handle("/Assets/", http.StripPrefix("/Assets/", http.FileServer(http.Dir("page/Assets"))))
+
+	http.HandleFunc("/", controllers.Home)
+
+	server.HandleFunc("/auth", controllers.Authentification)
+	server.HandleFunc("/register", controllers.Authentification)
+	server.HandleFunc("/login", controllers.Authentification)
+
 	server.HandleFunc("/api", api.CreateAPI)
-	server.HandleFunc("/authentification", controllers.Authentification)
 
 }

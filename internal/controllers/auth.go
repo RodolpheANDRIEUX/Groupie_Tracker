@@ -18,31 +18,64 @@ type User struct {
 }
 
 func Authentification(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		formType := r.FormValue("form_type")
 
-	// Charger le contenu des fichiers HTML, CSS et JS
-	htmlBytes, err := ioutil.ReadFile("page/authentification.html")
+		switch formType {
+		case "login":
+			username := r.FormValue("usernameLogin")
+			password := r.FormValue("passwordLogin")
+
+			var passwordDB string
+			err := database.Database.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			if CheckPasswordHash(password, passwordDB) {
+				println("Password correct")
+				session, _ := CookieStorage.Get(r, username)
+				session.Values["Username"] = userValue.Username
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+			} else {
+				println("Password incorrect")
+				//todo : Reload page with error message
+				fmt.Printf("Login - Username: %s, Password: %s\n", username, password)
+			}
+		case "register":
+			username := r.FormValue("usernameRegister")
+			password, _ := HashPassword(r.FormValue("passwordRegister"))
+			fmt.Printf("Register - Username: %s, Password: %s\n", username, password)
+
+			var user int
+			err := database.Database.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			if user > 0 {
+				fmt.Println("User already exists")
+				return
+			} else {
+				_, err = database.Database.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
+				session, _ := CookieStorage.Get(r, username)
+				session.Values["Username"] = userValue.Username
+				fmt.Println("User created")
+			}
+		default:
+			println("Error")
+		}
+	}
+
+	htmlBytes, err := ioutil.ReadFile("page/auth.html")
 	if err != nil {
 		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
 		return
 	}
-	//cssBytes, err := ioutil.ReadFile("./static/style.css")
-	//if err != nil {
-	//	http.Error(w, "Erreur lors du chargement du fichier CSS", http.StatusInternalServerError)
-	//	return
-	//}
-	//if err != nil {
-	//http.Error(w, "Erreur lors du chargement du fichier JavaScript", http.StatusInternalServerError)
-	//return
-	//}
-	//jsBytes, err := ioutil.ReadFile("./static/script.js")
-
-	// Définir l'en-tête de la réponse HTTP
 	w.Header().Set("Content-Type", "text/html")
 
-	// Concaténer le contenu des fichiers HTML, CSS et JS
 	html := string(htmlBytes)
-	//html = strings.Replace(html, "{{CSS}}", string(cssBytes), 1)
-	//html = strings.Replace(html, "{{JS}}", string(jsBytes), 1)
 
 	// Écrire la réponse HTTP
 	if _, err := fmt.Fprint(w, html); err != nil {
@@ -52,7 +85,7 @@ func Authentification(w http.ResponseWriter, r *http.Request) {
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
-	htmlBytes, err := os.ReadFile("page/register.html")
+	htmlBytes, err := os.ReadFile("page/auth.html")
 	if err != nil {
 		fmt.Println("Erreur lors du chargement du fichier HTML" + err.Error())
 		log.Printf("Erreur lors du chargement du fichier HTML\" %v", err)
@@ -69,8 +102,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		username := r.FormValue("usernameInput")
-		password, _ := HashPassword(r.FormValue("passwordInput"))
+		username := r.FormValue("usernameRegister")
+		password, _ := HashPassword(r.FormValue("passwordRegister"))
 
 		var user int
 		err := database.Database.QueryRow("SELECT COUNT(UserName) FROM Users WHERE UserName=?", username).Scan(&user)
@@ -92,7 +125,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
-	htmlBytes, err := ioutil.ReadFile("page/login.html")
+	htmlBytes, err := ioutil.ReadFile("page/auth.html")
 	if err != nil {
 		http.Error(w, "Erreur lors du chargement du fichier HTML", http.StatusInternalServerError)
 		return
@@ -108,8 +141,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		username := r.FormValue("usernameInput")
-		passwordInput := r.FormValue("passwordInput")
+		username := r.FormValue("usernameLogin")
+		passwordInput := r.FormValue("passwordLogin")
 
 		var passwordDB string
 		err := database.Database.QueryRow("SELECT Password FROM Users WHERE UserName = ?", username).Scan(&passwordDB)
@@ -121,7 +154,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			println("Password correct")
 			session, _ := CookieStorage.Get(r, username)
 			session.Values["Username"] = userValue.Username
-			//todo : Redirect to next page
+			http.Redirect(w, r, "/home", http.StatusSeeOther)
 		} else {
 			println("Password incorrect")
 			//todo : Reload page with error message
