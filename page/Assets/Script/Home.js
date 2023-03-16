@@ -1,3 +1,4 @@
+
 async function fetchArtistData() {
     const response = await fetch("http://localhost:3000/api");
     return await response.json();
@@ -159,3 +160,8 @@ async function fetchPhotoUrl(searchTerm) {
 
 displayRecentConcerts();
 
+// SEARCH BAR
+
+function submitForm() {
+    document.getElementById("searchForm").submit();
+}
