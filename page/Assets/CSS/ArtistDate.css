@@ -1,0 +1,58 @@
+.DateCardImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.DateCardFilter {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: inset 5px 0 50px #1e1e1e;
+    transition: .5s;
+}
+
+.home-Date-Card:hover .DateCardFilter {
+    box-shadow: inset 5px 0 20px #1e1e1e;
+    cursor: pointer;
+}
+
+.home-Date-Card {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    margin-bottom: 20px;
+    background: #1e1e1eee;
+    border-radius: 20px;
+    display: flex;
+}
+
+.card-artist-name {
+    position: absolute;
+    font-size: 30px;
+    left: 5px;
+    transition: .5s;
+}
+
+.home-Date-Card:hover .card-artist-name {
+    transform: translate(15%, 0);
+    cursor: pointer;
+    transition: 1s;
+}
+
+.home-Date-Card:hover .card-concert-date{
+    transform: translate(-20%, 0);
+    scale: 1.2;
+    cursor: pointer;
+    transition: 1s;
+}
+
+.card-concert-date{
+    position: absolute;
+    font-size: 22px;
+    top: 50%;
+    left: 30%;
+    transition: .5s;
+}
