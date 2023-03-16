@@ -17,6 +17,13 @@ function createArtistCard(artist) {
     const artistDate = card.querySelector(".artist-date");
     artistDate.textContent = artist.creationDate;
 
+    const artistDatesLink = card.querySelector(".datesButton");
+    artistDatesLink.href = `/artistPage?artist=${artist.name}#ArtistDates`;
+
+    const artistLink = card.querySelector(".artist-info");
+    artistLink.href = `/artistPage?artist=${artist.name}`;
+
+
     return card;
 }
 
@@ -65,6 +72,71 @@ document.getElementById("More").addEventListener("click", async () => {
     document.getElementById("More").style.display = "none";
 });
 
+displayArtistCards(12).then(r => console.log(r));
+
+
+// DATES
+
+
+async function getUpcomingConcerts() {
+    const artists = await fetchArtistData();
+    const upcomingConcerts = [];
+
+    artists.forEach((artist) => {
+        for (const location in artist.datesLocations) {
+            const dates = artist.datesLocations[location];
+            dates.forEach((date) => {
+                upcomingConcerts.push({
+                    artistName: artist.name,
+                    date: date,
+                    location: location,
+                });
+            });
+        }
+    });
+
+    return upcomingConcerts;
+}
+
+
+function sortConcertsByDate(concerts) {
+    return concerts.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        return dateA - dateB;
+    });
+}
+
+async function createHomeDateCard(artistName, date, location) {
+    const template = document.querySelector(".Date-card-template");
+    const card = template.content.cloneNode(true);
+
+    const artistElement = card.querySelector(".card-artist-name");
+    artistElement.textContent = artistName;
+
+    const dateElement = card.querySelector(".card-concert-date");
+    dateElement.textContent = date;
+
+    const cityImage = card.querySelector(".DateCardImage");
+    cityImage.src = await fetchPhotoUrl(location);
+
+    return card;
+}
+
+
+async function displayRecentConcerts() {
+    const container = document.querySelector(".dates-container");
+    const concerts = await getUpcomingConcerts();
+    const sortedConcerts = sortConcertsByDate(concerts);
+    const recentConcerts = sortedConcerts.slice(0, 10);
+
+    for (const concert of recentConcerts) {
+        const card = await createHomeDateCard(concert.artistName, concert.date, concert.location);
+        container.appendChild(card);
+    }
+}
+
 async function fetchPhotoUrl(searchTerm) {
     const apiUrl = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=qeN1F7bV473dm1aW_F5u6nfnc-6BlCIfoeaTm8fSSBY`;
 
@@ -85,4 +157,5 @@ async function fetchPhotoUrl(searchTerm) {
     }
 }
 
-displayArtistCards(12).then(r => console.log(r));
+displayRecentConcerts();
+

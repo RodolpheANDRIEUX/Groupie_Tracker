@@ -6,13 +6,13 @@
   <link rel="stylesheet" href="Assets/CSS/header.css">
   <link rel="stylesheet" href="Assets/CSS/Home.css">
   <link rel="stylesheet" href="Assets/CSS/ArtistPage.css">
+
 </head>
 
 
 <body>
 <div id="BackCircle"></div>
 <div id="BackBlack"></div>
-
 
 <header>
   <a href="/#home"><img id="logo" src="Assets/img/icon.png"  alt="GpTr"></a>
@@ -25,21 +25,43 @@
   </div>
 </header>
 
+
+
 <section id="ArtistPage">
   <img id="artistImage" src="https://resize-public.ladmedia.fr/rcrop/1200,/img/var/public/storage/images/news/on-t-aime-a-mourir-mimie-mathy-en-larmes-les-enfoires-lui-ont-fait-un-cadeau-des-plus-emouvants-1765497/47446879-1-fre-FR/On-t-aime-a-mourir-Mimie-Mathy-en-larmes-les-Enfoires-lui-ont-fait-un-cadeau-des-plus-emouvants.jpg" alt="Artist image">
   <div id="ArtistName">Katy Perry</div>
 </section>
 
+
+
 <section id="ArtistDates">
   <div class="Title3">Next Dates</div>
   <div class="line"></div>
 
-
+  <template id="Date-card-template">
     <div class="DateCard">
-        <div class="DateCardDate">Date</div>
-        <div class="DateCardLocation">Location</div>
+      <img class="DateCardImage" src="https://images.unsplash.com/photo-1633311764986-27dc254e6f79?ixid=Mnw0MjI5MDV8MHwxfHNlYXJjaHwxfHxPa2luYXdhfGVufDB8fHx8MTY3ODk1NjgwNw&ixlib=rb-4.0.3" alt="">
+      <div class="DateCardFilter"></div>
+      <div class="DateCardDate">Date</div>
+      <div class="DateCardLocation">Location</div>
     </div>
+  </template>
+
+  <div class="Date-container">
+<!--    Les cartes vont ici      -->
+  </div>
+
+</section>
+
+
+
+<section id="Albums">
+  <div class="Title3">Albums</div>
+  <div class="line"></div>
+
 </section>
 
 </body>
 </html>
+
+<script src="Assets/Script/ArtistPage.js"></script>

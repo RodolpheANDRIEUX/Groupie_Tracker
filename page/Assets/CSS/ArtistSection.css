@@ -113,6 +113,9 @@
     border: 0;
     background: #e7580a;
     font-family: 'ABeeZee', sans-serif;
+    display: inline-block;
+    line-height: 32px;
+    text-align: center;
     font-size: 15px;
     transition: .5s;
 }

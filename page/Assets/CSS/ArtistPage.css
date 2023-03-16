@@ -51,22 +51,61 @@
     text-align: center;
 }
 
+.DateCardImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.DateCardFilter {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: inset 5px 0 50px #1e1e1e;
+    transition: .5s;
+}
+
+.DateCard:hover .DateCardFilter {
+    box-shadow: inset 5px 0 20px #1e1e1e;
+    cursor: pointer;
+}
+
 .DateCard {
+    position: relative;
     height: 100px;
-    width: 80%;
+    width: 100%;
+    margin-bottom: 20px;
     background: #1e1e1eee;
     border-radius: 20px;
     display: flex;
-    align-items: center;
-    text-align: center;
-}
-
-.DateCardDate {
-    font-size: 50px;
-    padding-top: 20px;
 }
 
 .DateCardLocation {
-    font-size: 20px;
-    padding-bottom: 50px;
+    position: absolute;
+    font-size: 30px;
+    left: 5px;
+    transition: .5s;
+}
+
+.DateCard:hover .DateCardLocation {
+    transform: translate(15%, 0);
+    cursor: pointer;
+    transition: 1s;
+}
+
+.DateCard:hover .DateCardDate{
+    transform: translate(-20%, 0);
+    scale: 1.2;
+    cursor: pointer;
+    transition: 1s;
+}
+
+.DateCardDate{
+    position: absolute;
+    font-size: 22px;
+    top: 50%;
+    left: 30%;
+    transition: .5s;
 }

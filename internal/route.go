@@ -12,6 +12,7 @@ func Init_routes(server *http.ServeMux) {
 	server.HandleFunc("/register", controllers.Register)
 	server.HandleFunc("/login", controllers.Login)
 	server.HandleFunc("/", controllers.Home)
+	server.HandleFunc("/artistPage", controllers.ArtistPage)
 	server.HandleFunc("/api", api.CreateAPI)
 	server.HandleFunc("/authentification", controllers.Authentification)
 
