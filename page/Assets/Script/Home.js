@@ -159,3 +159,29 @@ async function fetchPhotoUrl(searchTerm) {
 
 displayRecentConcerts();
 
+
+function UpdateHeaderLoginStatus() {
+    const usernameCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('username='))
+        ?.split('=')[1];
+
+    if (usernameCookie) {
+        document.querySelector('.btnLogin-popup').style.display = 'none';
+        document.querySelector('#user-info').style.display = 'flex';
+        document.querySelector('#username').textContent = usernameCookie;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', UpdateHeaderLoginStatus);
+
+document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault(); // Empêcher la soumission automatique du formulaire
+
+
+});
+
+window.addEventListener('beforeunload', () => {
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+});
+

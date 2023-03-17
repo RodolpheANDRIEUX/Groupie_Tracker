@@ -88,3 +88,25 @@ async function fetchPhotoUrl(searchTerm) {
         return null;
     }
 }
+
+
+function UpdateHeaderLoginStatusArtist() {
+    const usernameCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('username='))
+        ?.split('=')[1];
+
+    if (usernameCookie) {
+        document.querySelector('#user-info').style.display = 'flex';
+        document.querySelector('#username').textContent = usernameCookie;
+    } else {
+        document.querySelector('#user-info').style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', UpdateHeaderLoginStatusArtist);
+
+
+window.addEventListener('beforeunload', () => {
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+});

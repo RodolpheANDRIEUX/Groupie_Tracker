@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -27,15 +28,18 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 			if CheckPasswordHash(password, passwordDB) {
 				println("Password correct")
-				//session, _ := CookieStorage.Get(r, username)
-				username = userValue.Username
-				//session.Values["Username"] = userValue.Username
-				http.Redirect(w, r, "/", http.StatusSeeOther)
+				fmt.Println("Username: " + username)
+				expiration := time.Now().Add(24 * time.Hour)
+				cookie := http.Cookie{Name: "username", Value: username, Expires: expiration}
+				http.SetCookie(w, &cookie)
 			} else {
+
 				println("Password incorrect")
 				//todo : Reload page with error message
 				fmt.Printf("Login - Username: %s, Password: %s\n", username, password)
+				w.WriteHeader(http.StatusUnauthorized)
 			}
+
 		case "register":
 			username := r.FormValue("usernameRegister")
 			password, _ := HashPassword(r.FormValue("passwordRegister"))
@@ -49,7 +53,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 			if user > 0 {
 				fmt.Println("User already exists")
-				return
 			} else {
 				_, err = database.Database.Exec("INSERT INTO Users(UserName, Password) VALUES(?, ?)", username, password)
 				//session, _ := CookieStorage.Get(r, username)
@@ -59,9 +62,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		default:
 			println("Error")
 		}
-	}
 
-	// launch page/home.html
+	}
 
 	htmlBytes, err := os.ReadFile("page/Home.html")
 	if err != nil {
@@ -71,11 +73,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	w.Header().Set(userValue.Username, "text/html")
 
 	html := string(htmlBytes)
 
-	// Écrire la réponse HTTP
 	if _, err := fmt.Fprint(w, html); err != nil {
 		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
 	}

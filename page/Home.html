@@ -33,6 +33,10 @@
             <a href="#dates">DATES</a>
             <a href="#about">ABOUT</a>
             <button class="btnLogin-popup">Login</button>
+            <div id="user-info" style="display: none;">
+                <ion-icon id="user-icon" name="person-circle-outline"></ion-icon>
+                <span id="username"></span>
+            </div>
         </div>
 </header>
 
@@ -52,7 +56,7 @@
             <div class="form-box login">
                 <h2>Login</h2>
 
-                <form action="/" method="post">
+                <form action="/" method="post" onsubmit="UpdateHeaderLoginStatus();">
                     <input type="hidden" name="form_type" value="login">
 
                     <div class="input-box">
@@ -68,7 +72,7 @@
                     </div>
 
 
-
+                    <p class="error-message" style="display:none"></p>
                     <button type="submit" class="btn">Login</button>
 
                     <div class="login-register">
