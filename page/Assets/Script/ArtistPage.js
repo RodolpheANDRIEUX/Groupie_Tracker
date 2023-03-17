@@ -34,6 +34,15 @@ async function fetchArtistData(artistName) {
 function displayArtistInfo(artist) {
     document.getElementById("ArtistName").textContent = artist.name;
     document.getElementById("artistImage").src = artist.image;
+
+    let membersListElement = document.getElementById("members-list");
+    for (const member of artist.members) {
+        let memberSpan = document.createElement('span');
+        memberSpan.textContent = member;
+        memberSpan.innerHTML += '<br>';
+        membersListElement.appendChild(memberSpan);
+    }
+
     displayDateCards(artist);
 }
 
@@ -47,7 +56,10 @@ async function createDateCard(date, location) {
     dateElement.textContent = date;
 
     const locationElement = dateCard.querySelector(".DateCardLocation");
-    locationElement.textContent = location;
+    const [city, country] = location.split("-");
+    const cityFormatted = city.charAt(0).toUpperCase() + city.slice(1).replace("_", " ");
+    locationElement.textContent = cityFormatted + ", " + country;
+
 
     const cityImage = dateCard.querySelector(".DateCardImage");
     cityImage.src = await fetchPhotoUrl(location);
@@ -70,7 +82,7 @@ async function displayDateCards(artistData) {
 }
 
 async function fetchPhotoUrl(searchTerm) {
-    const apiUrl = `https://api.unsplash.com/search/photos?query=${searchTerm}&client_id=qeN1F7bV473dm1aW_F5u6nfnc-6BlCIfoeaTm8fSSBY`;
+    const apiUrl = `https://api.unsplash.com/search/photos?query=${searchTerm}-city&client_id=qeN1F7bV473dm1aW_F5u6nfnc-6BlCIfoeaTm8fSSBY`;
 
     try {
         const response = await fetch(apiUrl);

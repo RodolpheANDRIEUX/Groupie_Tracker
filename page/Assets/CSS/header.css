@@ -82,6 +82,10 @@ body {
     display: flex;
 }
 
+#nav a.active {
+    color: #e7580a;
+}
+
 header{
     position: fixed;
     width: 100%;

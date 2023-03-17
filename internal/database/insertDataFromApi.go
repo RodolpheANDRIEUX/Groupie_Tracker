@@ -131,6 +131,7 @@ func PopulateDatabase() {
 		//fmt.Println(artist.ArtistName, "(", artist.CreationDate, ") - Members:", len(artist.Members), " - Followers:", artist.SpotifyFollowers.Total)
 		SaveArtist(artist, DB)
 	}
+	fmt.Println("Ready to use")
 }
 
 func SaveArtist(artist Artist, db *sql.DB) {
