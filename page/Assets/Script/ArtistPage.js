@@ -39,7 +39,6 @@ function displayArtistInfo(artist) {
     for (const member of artist.members) {
         let memberSpan = document.createElement('span');
         memberSpan.textContent = member;
-        memberSpan.innerHTML += '<br>';
         membersListElement.appendChild(memberSpan);
     }
 
