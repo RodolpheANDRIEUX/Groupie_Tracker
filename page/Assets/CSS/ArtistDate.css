@@ -10,7 +10,7 @@
     height: 100%;
     width: 100%;
     border-radius: 20px;
-    box-shadow: inset 5px 0 50px #1e1e1e;
+    box-shadow: inset 5px 0 70px #1e1e1e;
     transition: .5s;
 }
 
@@ -33,20 +33,21 @@
     position: absolute;
     font-size: 30px;
     left: 5px;
-    transition: .5s;
+    transition-delay: .5s;
+    transition: .1s;
 }
 
 .home-Date-Card:hover .card-artist-name {
     transform: translate(15%, 0);
     cursor: pointer;
-    transition: 1s;
+    transition: .5s;
 }
 
 .home-Date-Card:hover .card-concert-date{
     transform: translate(-20%, 0);
     scale: 1.2;
     cursor: pointer;
-    transition: 1s;
+    transition: .5s;
 }
 
 .card-concert-date{
@@ -54,5 +55,24 @@
     font-size: 22px;
     top: 50%;
     left: 30%;
+    transition-delay: .5s;
+    transition: 1s;
+}
+
+.home-Date-Card:hover .card-concert-location{
+    transform: translate(-30%, 0);
+    scale: 1.2;
+    cursor: pointer;
     transition: .5s;
+}
+
+.card-concert-location{
+    position: absolute;
+    font-size: 32px;
+    left: 50%;
+    transition-delay: .5s;
+    transition: 1s;
+}
+
+#members-list {
 }
