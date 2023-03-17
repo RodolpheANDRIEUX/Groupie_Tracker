@@ -117,13 +117,20 @@
 
         <div id="searchBarSection">
             <form id="searchForm">
+                <div class="search-container">
                 <p id="searchP">Find your favorite artist, group, ect...</p>
-                <input type="search" id="search" name="search" autocomplete="off">
+                <input type="text" id="search" name="search" autocomplete="off" placeholder="Recherche d'artistes..." >
+        <div id="results" class="results"></div>
                 <img id="searchIcon" src="Assets/img/search.png" alt="search" onclick="submitForm()">
                 <button type="submit" id="submitSearch"></button>
+                </div>
             </form>
 
         </div>
+
+<!--            <input type="text" id="search" placeholder="Recherche d'artistes...">-->
+<!--            <div id="results" class="results"></div>-->
+<!--        </div>-->
 
     </section>
 
@@ -207,3 +214,5 @@
 <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
 <script src="Assets/Script/Home.js"></script>
 <script src="Assets/Script/auth.js"></script>
+<script src="Assets/Script/searchBar.js"></script>
+

@@ -30,14 +30,13 @@ func Home(w http.ResponseWriter, r *http.Request) {
 				println("Password correct")
 				fmt.Println("Username: " + username)
 				expiration := time.Now().Add(24 * time.Hour)
-				cookie := http.Cookie{Name: "username", Value: username, Expires: expiration}
+				cookie := http.Cookie{Name: "username", Value: username, Expires: expiration, Path: "/"}
 				http.SetCookie(w, &cookie)
 			} else {
 
 				println("Password incorrect")
 				//todo : Reload page with error message
 				fmt.Printf("Login - Username: %s, Password: %s\n", username, password)
-				w.WriteHeader(http.StatusUnauthorized)
 			}
 
 		case "register":
@@ -79,5 +78,4 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	if _, err := fmt.Fprint(w, html); err != nil {
 		log.Printf("Erreur lors de l'écriture de la réponse HTTP: %v", err)
 	}
-
 }

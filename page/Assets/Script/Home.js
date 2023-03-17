@@ -221,11 +221,11 @@ function UpdateHeaderLoginStatus() {
 
 document.addEventListener('DOMContentLoaded', UpdateHeaderLoginStatus);
 
-document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault(); // Empêcher la soumission automatique du formulaire
+// document.getElementById('login-form').addEventListener('submit', (e) => {
+//     e.preventDefault(); // Empêcher la soumission automatique du formulaire
 
 
-});
+// });
 
 window.addEventListener('beforeunload', () => {
     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

@@ -154,3 +154,78 @@ input[type="search"]::-ms-clear {
     color: #e7580a;
     font-size: 1.5rem;
 }
+
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Style pour la section de la barre de recherche */
+#searchBarSection {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* height: 100vh; */
+    /* background-color: #f7f7f7; */
+}
+
+/* Style pour le formulaire de recherche */
+#searchForm {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-container {
+    /* display: flex; */
+    /* align-items: center; */
+    /* background-color: #fff; */
+    /* border: 1px solid #ccc; */
+    /* border-radius: 5px; */
+    /* padding: 5px; */
+}
+
+#searchP {
+    margin-right: 10px;
+}
+
+/* Style pour la barre de recherche */
+#search {
+    border: none;
+    outline: none;
+    padding: 5px;
+    background-color: transparent;
+}
+
+/* Style pour l'icône de recherche */
+#searchIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Style pour les résultats de la recherche */
+#results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1;
+    display: none;
+}
+
+#results a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 5px;
+}
+
+#results a:hover {
+    background-color: #f1f1f1;
+}
