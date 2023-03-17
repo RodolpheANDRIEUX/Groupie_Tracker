@@ -14,16 +14,28 @@ search.addEventListener('input', (event) => {
         results.style.display = 'none';
     } else {
         fetchArtistData2().then(artists => {
-            const filteredArtists = artists.filter(artist => artist.name.toLowerCase().includes(searchTerm));
+            const filteredResults = [];
 
-            if (filteredArtists.length === 0) {
+            artists.forEach(artist => {
+                if (artist.name.toLowerCase().includes(searchTerm)) {
+                    filteredResults.push({ name: artist.name, artist: artist.name });
+                } else {
+                    artist.members.forEach(member => {
+                        if (member.toLowerCase().includes(searchTerm)) {
+                            filteredResults.push({ name: member, artist: artist.name });
+                        }
+                    });
+                }
+            });
+
+            if (filteredResults.length === 0) {
                 results.style.display = 'none';
             } else {
                 results.style.display = 'block';
-                filteredArtists.forEach(artist => {
+                filteredResults.forEach(result => {
                     const link = document.createElement('a');
-                    link.textContent = artist.name;
-                    link.href = `http://localhost:3000/artistPage?artist=${artist.name}`;
+                    link.textContent = result.name;
+                    link.href = `http://localhost:3000/artistPage?artist=${result.artist}`;
                     results.appendChild(link);
                 });
             }

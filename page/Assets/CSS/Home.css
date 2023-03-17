@@ -200,8 +200,9 @@ body {
 
 /* Style pour l'icône de recherche */
 #searchIcon {
-    width: 20px;
-    height: 20px;
+    margin-top: 2px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 
@@ -228,4 +229,8 @@ body {
 
 #results a:hover {
     background-color: #f1f1f1;
+}
+
+#mapImage {
+    width: 80%;
 }

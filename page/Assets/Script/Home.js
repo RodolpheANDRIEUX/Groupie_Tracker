@@ -1,3 +1,9 @@
+const filterBtn = document.getElementById("Filters");
+
+filterBtn.addEventListener("click", function() {
+    filterBtn.classList.add("deployed");
+});
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const navLinks = document.querySelectorAll("#nav a");

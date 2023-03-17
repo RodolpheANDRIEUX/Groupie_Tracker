@@ -15,7 +15,7 @@
     transition: 0.5s;
 }
 
-#FiltersDeployed{
+#Filters.deployed{
     cursor: pointer;
     width: 900px;
     height: 150px;
