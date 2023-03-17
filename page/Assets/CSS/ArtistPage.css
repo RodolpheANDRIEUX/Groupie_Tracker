@@ -109,3 +109,15 @@
     left: 30%;
     transition: .5s;
 }
+
+#members-list {
+    font-size: 20px;
+}
+
+#members-list span {
+    display: block;
+}
+
+#members-list span::first-letter {
+    color: #e7580a;
+}
